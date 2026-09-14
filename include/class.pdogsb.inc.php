@@ -67,7 +67,7 @@ function checkUser($login,$pwd):bool {
     if ($monObjPdoStatement->execute()) {
         $unUser=$monObjPdoStatement->fetch();
         if (is_array($unUser)){
-           if ($pwd==$unUser['motDePasse'])
+           if (password_verify($pwd,$unUser['motDePasse']))
                 $user=true;
         }
     }
