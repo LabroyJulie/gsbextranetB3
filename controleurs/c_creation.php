@@ -82,7 +82,8 @@ switch($action){
         }
         if($rempli && $loginOk && $passwordOk){
                 echo 'tout est ok, nous allons pouvoir créer votre compte...<br/>';
-                $executionOK = $pdo->creeMedecin($leLogin,$lePassword);       
+                $passwordHash=password_hash($lePassword, PASSWORD_DEFAULT);
+                $executionOK = $pdo->creeMedecin($leLogin,$passwordHash);       
                
                 if ($executionOK==true){
                     echo "c'est bon, votre compte a bien été créé ;-)";
