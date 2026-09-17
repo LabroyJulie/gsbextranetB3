@@ -46,15 +46,13 @@ CREATE TABLE IF NOT EXISTS `medecin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(40) DEFAULT NULL,
   `prenom` varchar(30) DEFAULT NULL,
-  `telephone` varchar(10) DEFAULT NULL,
   `mail` varchar(50) DEFAULT NULL,
-  `dateNaissance` date DEFAULT NULL,
+  `annee_naissance` year(4) DEFAULT NULL,
   `motDePasse` varchar(30) DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
   `rpps` varchar(10) DEFAULT NULL,
   `token` varchar(100) DEFAULT NULL,
-  `dateDiplome` date DEFAULT NULL,
-  `sport` tinyint(1) DEFAULT NULL,
+  `annee_diplome` year(4) DEFAULT NULL,
   `dateConsentement` date DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
