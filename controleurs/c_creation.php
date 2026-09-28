@@ -28,6 +28,8 @@ switch($action){
              $loginOk = false;
              $passwordOk=false;
         }
+
+        $recupCondition=isset($_POST['consentement']) ;
         //test récup données
         //echo $leLogin.' '.$lePassword;
         $rempli=false;
@@ -42,6 +44,21 @@ switch($action){
             echo 'Le mot de passe n\'a pas été saisi<br/>';
             $rempli=false; 
         }
+        if (!preg_match('/^[0-9]{4}$/', $_POST['annee_naissance']))
+        {
+            echo 'Annee de naissance invalide';
+            $rempli=false;
+        }
+        if (!preg_match('/^[0-9]{4}$/', $_POST['annee_diplome']))
+        {
+            echo 'Annee de diplome invalide';
+            $rempli=false;
+        }
+        if (!isset ($_POST['consentement'])){
+            echo 'Vous n\avez pas accepté nos conditions d\utilisation !<br/>';
+            $rempli=false; 
+        }
+        
         
         
         //si le login et le mdp contiennent quelque chose
@@ -83,11 +100,18 @@ switch($action){
         if($rempli && $loginOk && $passwordOk){
                 echo 'tout est ok, nous allons pouvoir créer votre compte...<br/>';
                 $passwordHash=password_hash($lePassword, PASSWORD_DEFAULT);
-                $executionOK = $pdo->creeMedecin($leLogin,$passwordHash);       
+                $annee_naissance=($_POST['annee_naissance']);
+                $annee_diplome=($_POST['annee_diplome']);
+                $executionOK = $pdo->creeMedecin($leLogin,$passwordHash, $annee_naissance, $annee_diplome);       
                
-                if ($executionOK==true){
+                if (isset($executionOK)){
+                    $versionPol=$pdo->version_politique(); 
+                    $creeConsentement=$pdo->creer_consentement($executionOK,$versionPol);
+                    if($creeConsentement==true)
+                    {
                     echo "c'est bon, votre compte a bien été créé ;-)";
                     $pdo->connexionInitiale($leLogin);
+                    }
                 }   
                 else
                      echo "ce login existe déjà, veuillez en choisir un autre";

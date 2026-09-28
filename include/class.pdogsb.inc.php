@@ -110,18 +110,38 @@ $leResultat = $pdoStatement->fetch();
 }
 
 
-public function creeMedecin($email, $mdp)
+public function creeMedecin($email, $mdp, $annee_naissance, $annee_diplome)
 {
    
-    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO medecin(id,mail, motDePasse,dateCreation,dateConsentement) "
-            . "VALUES (null, :leMail, :leMdp, now(),now())");
+    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO medecin(id,mail, motDePasse,dateCreation,dateConsentement,annee_naissance, annee_diplome) "
+            . "VALUES (null, :leMail, :leMdp, now(),now(), :annee_naissance, :annee_diplome)");
     $bv1 = $pdoStatement->bindValue(':leMail', $email);
-   
     $bv2 = $pdoStatement->bindValue(':leMdp', $mdp);
+    $bv3 = $pdoStatement->bindValue(':annee_naissance', $annee_naissance);
+    $bv4 = $pdoStatement->bindValue(':annee_diplome', $annee_diplome);
+    $execution = $pdoStatement->execute();
+    return PdoGsb::$monPdo->lastInsertId();
+     
+}
+
+public function version_politique()
+{
+    $pdoStatement = PdoGsb::$monPdo->prepare("Select id_politiqueVersion from politique_version order by id_politiqueVersion DESC");
+    $execution=$pdoStatement->execute();
+    return $pdoStatement->fetchColumn();
+}
+
+public function creer_consentement($idMedecin,$id_version)
+{
+    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO consentement(id_consentement, id_medecin, date_consentement, id_version) "
+            . "VALUES (null, :id_medecin, now(), :id_version)");
+    $bv1 = $pdoStatement->bindValue(':id_medecin', $idMedecin);
+    $bv2 = $pdoStatement->bindValue(':id_version', $id_version);
     $execution = $pdoStatement->execute();
     return $execution;
-    
+     
 }
+
 
 
 function testMail($email){
@@ -170,6 +190,19 @@ function donneinfosmedecin($id){
         throw new Exception("erreur");
            
     
+}
+
+function verifVersion ($id_medecin,$id_version){
+    $pdoStatement = PdoGsb::$monPdo->prepare("Select id_version from consentement where id_medecin = :id_medecin ORDER BY date_consentement DESC Limit 1");
+    $bv1=$pdoStatement->bindValue(":id_medecin", $id_medecin);
+    $execution=$pdoStatement->execute();
+    $idVersionActu = $pdoStatement->fetchColumn(0);
+
+    if($id_version == $idVersionActu){
+    return true;
+    }
+    return false;
+
 }
 
 

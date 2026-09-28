@@ -20,17 +20,35 @@ switch($action){
 			include("vues/v_erreurs.php");
 			include("vues/v_connexion.php");
 		}
-		else { 
-                        $infosMedecin = $pdo->donneLeMedecinByMail($login);
+		else { 				
+			$infosMedecin = $pdo->donneLeMedecinByMail($login);
+			$versionRecente=$pdo->version_politique();
+			$versionMedecin=$pdo->verifVersion ($id = $infosMedecin['id'],$versionRecente);
 			$id = $infosMedecin['id'];
 			$nom =  $infosMedecin['nom'];
 			$prenom = $infosMedecin['prenom'];
 			connecter($id,$nom,$prenom);
-                       
-			include("vues/v_sommaire.php");
+			if($versionMedecin == true)
+			{
+						   
+				include("vues/v_sommaire.php");
 			}
+			else{
+				include("vues/v_miseAJourVersion.php");
+			}
+		}
 
 			break;	
+	}
+	case 'valide_consentement':{
+		$versionRecente=$pdo->version_politique();
+		$creeConsentementAutre=$pdo->creer_consentement($_SESSION['id'],$versionRecente);
+		if($creeConsentementAutre==true)
+		{
+			include("vues/v_sommaire.php");
+		}
+		
+		break;
 	}
        
         

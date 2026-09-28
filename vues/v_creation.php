@@ -35,7 +35,11 @@
 							    <input name="mdp" class="form-control" type="password" placeholder="password"/>
                                                             <input name="prénom" class="form-control" type="text" placeholder="prénom"/>
                                                             <input name="nom" class="form-control" type="text" placeholder="nom"/>
+                                                            <input name="annee_naissance" class="form-control" type="number" min="1950" max='2026' placeholder="annee de naissance" require/>
+                                                            <input name="annee_diplome" class="form-control" type="number" min="1950" max='2026' placeholder="annee de diplome" require/>
 								<br>
+                                                            <input name="consentement" class="form-control" type="checkbox" require />
+                                                            <p>J'atteste avoir lu et accepte notre <a target="blank" href="vues/v_politiqueprotectiondonnees.html">politique de protection de données</a></p>
                                                             <input type="submit" class="btn btn-primary signup" value="Créer"/>
 							</form>
 							</br>
