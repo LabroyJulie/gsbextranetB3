@@ -28,8 +28,11 @@ switch($uc){
         case 'creation':{
 		include("controleurs/c_creation.php");break;
 	}
-        
-	
+        case 'portabilite':{
+		include("controleurs/droitPortabilite.php");break;
 	}
+	
+
+}
 	
 ?>

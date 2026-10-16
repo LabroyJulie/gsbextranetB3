@@ -179,12 +179,11 @@ function ajouteConnexionInitiale($id){
 }
 function donneinfosmedecin($id){
   
-       $pdo = PdoGsb::$monPdo;
-           $monObjPdoStatement=$pdo->prepare("SELECT id,nom,prenom FROM medecin WHERE id= :lId");
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT id,nom,prenom FROM medecin WHERE id= :lId");
     $bvc1=$monObjPdoStatement->bindValue(':lId',$id,PDO::PARAM_INT);
     if ($monObjPdoStatement->execute()) {
         $unUser=$monObjPdoStatement->fetch();
-   
     }
     else
         throw new Exception("erreur");
@@ -205,6 +204,45 @@ function verifVersion ($id_medecin,$id_version){
 
 }
 
+function recupDoneesMedecin($id){
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT nom,prenom, mail, annee_naissance, dateCreation, rpps, annee_diplome, dateConsentement FROM medecin WHERE id= :Id");
+    $bvc1=$monObjPdoStatement->bindValue(':Id',$id,PDO::PARAM_INT);
+    if ($monObjPdoStatement->execute()) {
+        $unUser=$monObjPdoStatement->fetch();
+        return $unUser;
+    }
+    else
+        throw new Exception("erreur");
+}
 
+function donneJson($donnee)
+{
+    return json_encode($donnee);
+
+}
+
+function creerFichierJson($id){
+    $pdo= PdoGsb::getPdoGsb();
+
+    $donneeBrut=$pdo->recupDoneesMedecin($id);
+    $donneeNetJson=$pdo->donneJson($donneeBrut);
+    $nomFichier=$id . ".json";
+    $chemin=dirname(__DIR__) . "/contenant_json";
+    $cheminComplet=$chemin . "/" .$nomFichier;
+    file_put_contents($cheminComplet, $donneeNetJson);
+}
+}
+
+function deleteFichierJson() {
+    $dossier = __DIR__ . "/../contenant_json";
+
+    $lesFichiers = scandir($dossier);
+
+    foreach ($lesFichiers as $fichier) {
+        if ($fichier != "." && $fichier != "..") {
+            unlink($dossier . "/" . $fichier);
+        }
+    }
 }
 ?>

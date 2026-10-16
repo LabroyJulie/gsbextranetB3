@@ -9,6 +9,14 @@
 <body>
     <footer>
         <a href="vues/v_politiqueprotectiondonnees.html">Politique de protection des données</a>
+        <?php
+    if (isset($_SESSION['id'])){
+        echo  "<a href='index.php?uc=portabilite'> RGPD - Droit</a>";
+
+
+    } 
+    ?>
     </footer>
 </body>
 </html>
+

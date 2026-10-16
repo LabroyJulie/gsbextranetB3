@@ -50,11 +50,10 @@ switch($action){
 		
 		break;
 	}
-       
-        
-	default :{
-		include("vues/v_connexion.php");
-		break;
+	case 'reconnexion':{
+		include("vues/v_sommaire.php");
 	}
+       
+    
 }
 ?>
